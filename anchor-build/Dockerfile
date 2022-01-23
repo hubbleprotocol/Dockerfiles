@@ -1,4 +1,4 @@
-FROM projectserum/build:v0.19.0
+FROM projectserum/build:v0.20.1
 
 RUN wget http://ftp.de.debian.org/debian/pool/main/p/python-base58/python3-base58_1.0.3-1_all.deb \
     && dpkg -i python3-base58_1.0.3-1_all.deb \
@@ -7,4 +7,4 @@ RUN wget http://ftp.de.debian.org/debian/pool/main/p/python-base58/python3-base5
 
 RUN apt-get update \
     && apt-get install -y parallel \
-
+    && rustup update
