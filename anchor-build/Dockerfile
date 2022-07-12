@@ -7,4 +7,4 @@ RUN wget http://ftp.de.debian.org/debian/pool/main/p/python-base58/python3-base5
 
 RUN apt-get update \
     && apt-get install -y parallel \
-    && rustup update
+    && rustup default 1.59
