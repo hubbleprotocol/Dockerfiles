@@ -5,7 +5,7 @@
 # is released on GitHub.
 #
 
-FROM ubuntu:22.04
+FROM ubuntu:22.10
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -31,9 +31,9 @@ RUN apt-get install -qq \
     parallel libssl-dev libudev-dev python3-base58 base58
 
 # Install openssl 1.1.1 (required for solana-cli)
-RUN curl "http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1l-1ubuntu1_amd64.deb" -o libssl1.1_1.1.1l-1ubuntu1_amd64.deb && \
-    dpkg -i ./libssl1.1_1.1.1l-1ubuntu1_amd64.deb && \
-    rm -f libssl1.1_1.1.1l-1ubuntu1_amd64.deb
+RUN curl "http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb" -o libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb && \
+    dpkg -i ./libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb && \
+    rm -f libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
 
 # Install rust.
 RUN curl "https://sh.rustup.rs" -sfo rustup.sh && \
@@ -41,7 +41,7 @@ RUN curl "https://sh.rustup.rs" -sfo rustup.sh && \
     rustup component add rustfmt clippy
 
 # Install node / npm / yarn.
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
 ENV NVM_DIR="${HOME}/.nvm"
 RUN . $NVM_DIR/nvm.sh && \
     nvm install ${NODE_VERSION} && \
