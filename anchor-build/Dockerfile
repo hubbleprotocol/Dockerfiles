@@ -31,14 +31,12 @@ RUN apt-get install -qq \
     parallel libssl-dev libudev-dev python3-base58 base58
 
 # Install openssl 1.1.1 (required for solana-cli)
-RUN curl "http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb" -o libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb && \
-    dpkg -i ./libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb && \
-    rm -f libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
+RUN curl "http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb" -o libssl.deb && \
+    dpkg -i ./libssl.deb && \
+    rm -f libssl.deb
 
 # Install rust.
-RUN curl "https://sh.rustup.rs" -sfo rustup.sh && \
-    sh rustup.sh -y && \
-    rustup component add rustfmt clippy
+RUN curl "https://sh.rustup.rs" -sSf | sh -s -- -y --default-toolchain 1.66.1
 
 # Install node / npm / yarn.
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
@@ -55,8 +53,12 @@ RUN sh -c "$(curl -sSfL https://release.solana.com/${SOLANA_CLI}/install)"
 # Install anchor.
 RUN cargo install --git https://github.com/coral-xyz/anchor --tag ${ANCHOR_CLI} anchor-cli --locked
 
-# Build a dummy program to bootstrap the BPF SDK (doing this speeds up builds).
-RUN mkdir -p /tmp && cd tmp && anchor init dummy && cd dummy && anchor build && cd .. && rm -rf dummy
+# Build a sample from scope repository to bootstrap the BPF SDK (doing this speeds up builds).
+RUN git clone https://github.com/hubbleprotocol/scope.git && \
+    cd scope/programs/test_cpi_caller && \
+    cargo build-sbf && \
+    cd - && \
+    rm -rf scope
 
 WORKDIR /workdir
 
